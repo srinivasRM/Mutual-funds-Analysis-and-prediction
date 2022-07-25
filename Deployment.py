@@ -34,6 +34,9 @@ def visualization():
         sns.barplot(ax = axes[1,0],x='type_of_fund', y='five_year_returns', data=df).set(title='type of fund vs five year returns')
         sns.scatterplot(ax = axes[1,1 ],x='type_of_fund', y='aum_funds_individual_lst', data=df).set(title='type of fund vs aum of the funds ')
         st.pyplot(figure)
+        with st.expander("See explanation"):
+             st.write("""In the first three graphs, we can see that the returns on equity-oriented mutual funds are higher in comparison with the remaining types of funds. Although the overall AUM of debt funds in the fourth graph is higher than every other mutual fund,  the returns on debt funds are the lowest.    
+         """)
 
 
     with tab2:
@@ -41,6 +44,10 @@ def visualization():
         ax = sns.scatterplot(x='three_year_returns', y='five_year_returns', data=df).set(title='Three year returns vs Five Year returns')
         # To show the plot
         st.pyplot(fig)
+        with st.expander("See explanation"):
+             st.write("""
+                    In the current chart, it is evident from the graph that there is a positive correlation between 3 and 5-year returns. .    
+         """)
 
 
     with tab3:
@@ -48,28 +55,50 @@ def visualization():
         ax = sns.scatterplot(x='one_year_returns', y='five_year_returns', data=df).set(title='One year returns vs Five year returns ')
         # To show the plot
         st.pyplot(fig)
+        with st.expander("See explanation"):
+             st.write("""
+        
+In the current chart, we can see that the range of values from which the One-year returns start and ends is very wide and ranges from -40 to +40 which is not the case with the five-year returns. There seems to be no correlation with the one-year returns as well from the graph. 
+
+         """)
+       
 
     with tab4:
         fig, ax = plt.subplots()
         ax = sns.scatterplot(x='one_year_returns', y='three_year_returns', data=df).set(title='One year returns vs Three year returns ')
         # To show the plot
         st.pyplot(fig)
+        with st.expander("See explanation"):
+            st.write("""
+        There seems to be no correlation between the one-year and three returns. There seems to be no correlation between the one-year and three returns. However, the data seems to be condensed at -20 to 20 on the x-axis.
+         """)
     with tab5:
         fig, ax = plt.subplots()
         ax = sns.scatterplot(x='one_year_returns', y='aum_funds_individual_lst', data=df).set(title='AUM of funds vs One year returns ')
         # To show the plot
         st.pyplot(fig)
+        with st.expander("See explanation"):
+            st.write("""
+        There seems to be no correlation between the one-year and AUM. However, the funds that have returns from the range -20 t0 +20 seems to have high AUM.
+         """)
     with tab6:
         fig, ax = plt.subplots()
         ax = sns.scatterplot(x='three_year_returns', y='aum_funds_individual_lst', data=df).set(title='AUM of funds vs Three year returns ')
         # To show the plot
-        st.pyplot(fig)        
+        st.pyplot(fig)       
+        with st.expander("See explanation"):
+            st.write("""
+            There is a negative correlation with the three year returns and AUM as we can see in the graph. 
+         """)         
     with tab7:
         fig, ax = plt.subplots()
         ax = sns.scatterplot(x='five_year_returns', y='aum_funds_individual_lst', data=df).set(title='AUM of funds vs Five year returns ')
         # To show the plot
-        st.pyplot(fig)    
-
+        st.pyplot(fig)   
+        with st.expander("See explanation"): 
+            st.write("""
+            There is a negative correlation with the five year returns and AUM i.e. As the returns increase the AUM descreases. 
+         """)     
     with tab8:
         st.subheader('Debt percentage with vs and aum')
         figure, axes = plt.subplots(2, 2, figsize=(20,10))
@@ -155,7 +184,7 @@ def One_year_returns_predictions():
             pickled_model = pickle.load(open('model_one_year_returns.pkl', 'rb'))
             prediction = pickled_model.predict(prediction_tables)
 
-            if prediction <= 0:           
+            if prediction >= 0:           
                 st.metric(label="One Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)+(prediction/mynewlist[2])) + '%')
             else :
                 st.metric(label="One Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)-(prediction/mynewlist[2])) + '%')
@@ -217,7 +246,7 @@ def Three_year_returns_predictions():
             prediction = pickled_model.predict(prediction_tables)
 
 
-            if prediction <= 0:           
+            if prediction >= 0:           
                 st.metric(label="Three Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)+(one_year_returns_user/mynewlist[2])) + '%')
             else :
                 st.metric(label="Three Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)-(one_year_returns_user/mynewlist[2])) + '%')
@@ -282,7 +311,7 @@ def Five_year_returns_predictions():
             prediction = pickled_model.predict(prediction_tables)
 
 
-            if prediction <= 0:           
+            if prediction >= 0:           
                 st.metric(label="Five Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)+(one_year_returns_user/mynewlist[2])) + '%')
             else :
                 st.metric(label="Five Year returns", value = str(prediction[0]*100) + ' %',delta=str((prediction[0]*100)-(one_year_returns_user/mynewlist[2])) + '%')
